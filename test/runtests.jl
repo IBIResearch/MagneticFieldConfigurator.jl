@@ -1,6 +1,7 @@
 using MagneticFieldConfigurator
 using Test
+using CairoMakie
 
 @testset "MagneticFieldConfigurator.jl" begin
-    # Write your tests here.
+    include("MagneticFields.jl")
 end
