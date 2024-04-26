@@ -2,21 +2,34 @@ x = range(-1,stop=1,length=100)
 I = 100
 r = 0.5
 
-biotSavart(x,I,r) = I*4*pi*1e-7/2*r^2/((r^2+x^2)^(3/2))
+biotSavartCirc(x,I,r) = I*4*pi*1e-7/2*r^2/((r^2+x^2)^(3/2))
 
 c = CircularCoil("test", CoordinateSystem(), I, 1, r, 0, 0)
 
-
 for x_ in x
   B1 = c[[x_,0,0]][1]
-  B2 = biotSavart(x_,I,r)
+  B2 = biotSavartCirc(x_,I,r)
   @test abs( B1 - B2 ) / abs(B2) < 1e-14
 end
 
 fig = Figure()
 ax = Axis3(fig[1,1])
 plot!(ax, c)
-save("test.png", fig)
+save("testCirc.png", fig)
+
+a = b = 0.5
+biotSavartRectCenter(I,a,b) = I*4*pi*1e-7/pi*2*(1/a^2 + 1/b^2)^(1/2)
+
+cR = RectangularCoil("test", CoordinateSystem(), I, 1, a, b, 0.0, 0.0, 0.0)
+
+B1 = cR[[0,0,0]][1]
+B2 = biotSavartRectCenter(I,a,b)
+@test abs( B1 - B2 ) / abs(B2) < 1e-14
+
+fig = Figure()
+ax = Axis3(fig[1,1])
+plot!(ax, cR)
+save("testRect.png", fig)
 
 
 #=

@@ -60,7 +60,7 @@ function getWire(c::RectangularCoil)
         positions[3,r,t,l] = -sideB/2 + (s-0.5)/Ns*sideB
         paths[1,r,t,l] = 0
         paths[2,r,t,l] = 0
-        paths[3,r,t,l] = sideB/Ns/Nl/Nt
+        paths[3,r,t,l] = -sideB/Ns/Nl/Nt
         r += 1
       end
 
@@ -69,7 +69,7 @@ function getWire(c::RectangularCoil)
         positions[2,r,t,l] = -sideA/2 + (s-0.5)/Ns*sideA
         positions[3,r,t,l] = sideB/2
         paths[1,r,t,l] = 0
-        paths[2,r,t,l] = sideA/Ns/Nl/Nt
+        paths[2,r,t,l] = -sideA/Ns/Nl/Nt
         paths[3,r,t,l] = 0
         r += 1
       end
@@ -80,7 +80,7 @@ function getWire(c::RectangularCoil)
         positions[3,r,t,l] = sideB/2 - (s-0.5)/Ns*sideB
         paths[1,r,t,l] = 0
         paths[2,r,t,l] = 0
-        paths[3,r,t,l] = -sideB/Ns/Nl/Nt
+        paths[3,r,t,l] = sideB/Ns/Nl/Nt
         r += 1
       end
 
@@ -89,7 +89,7 @@ function getWire(c::RectangularCoil)
         positions[2,r,t,l] = sideA/2 - (s-0.5)/Ns*sideA
         positions[3,r,t,l] = -sideB/2 
         paths[1,r,t,l] = 0
-        paths[2,r,t,l] = -sideA/Ns/Nl/Nt
+        paths[2,r,t,l] = sideA/Ns/Nl/Nt
         paths[3,r,t,l] = 0
         r += 1
       end
