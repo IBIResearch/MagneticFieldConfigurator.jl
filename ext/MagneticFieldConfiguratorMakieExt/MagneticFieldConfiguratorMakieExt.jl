@@ -5,7 +5,7 @@ using MagneticFieldConfigurator, Makie
 function Makie.plot!(ax, coilarray, shift=[0,0,0], scale=1)
 
   for l=1:length(coilarray)
-    drawCoil!(ax, coilarray[l], shift, scale)
+    plot!(ax, coilarray[l], shift, scale)
   end
   return
 end
