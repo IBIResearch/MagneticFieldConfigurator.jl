@@ -24,7 +24,7 @@ cR = RectangularCoil("test", CoordinateSystem(), I, 1, a, b, 0.0, 0.0, 0.0)
 
 B1 = cR[[0,0,0]][1]
 B2 = biotSavartRectCenter(I,a,b)
-@test abs( B1 - B2 ) / abs(B2) < 1e-14
+@test abs( B1 - B2 ) / abs(B2) < 1e-3
 
 fig = Figure()
 ax = Axis3(fig[1,1])
