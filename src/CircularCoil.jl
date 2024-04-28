@@ -12,7 +12,6 @@ struct CircularCoil <: Coil
   CircularCoil(name::Union{String,Nothing}, args...) = new(newFieldName(CircularCoil,name), args...)
 end
 
-#CircularCoil(name::String, c::CoordinateSystem, I, radius) = CircularCoil(name, c, I,radius,1.0,0.0,0.0)
 CircularCoil(c::CoordinateSystem, args...) = CircularCoil(nothing, c, args...)
 
 

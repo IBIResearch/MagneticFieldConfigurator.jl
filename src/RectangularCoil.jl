@@ -14,6 +14,8 @@ struct RectangularCoil <: Coil
   RectangularCoil(name, args...) = new(newFieldName(RectangularCoil,name), args...)
 end
 
+RectangularCoil(c::CoordinateSystem, args...) = RectangularCoil(nothing, c, args...)
+
 function toDict(c::RectangularCoil)
   params = invoke(toDict, Tuple{Coil}, c)
   params["type"] = "RectangularCoil"
@@ -36,7 +38,7 @@ function RectangularCoil(params::Dict)
   length = params["length"]
   thickness = params["thickness"]
   windings = params["windings"]
-  return RectangularCoil(name,c,I,sideA,sideB,cornerRadius,windings,length,thickness)
+  return RectangularCoil(name,c,I,windings,sideA,sideB,cornerRadius,length,thickness)
 end
 
 function getWire(c::RectangularCoil)

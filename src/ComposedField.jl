@@ -10,6 +10,15 @@ struct ComposedField <: AbstractField
   ComposedField(name::Union{String,Nothing}, args...) = new(newFieldName(ComposedField,name), args...)
 end
 
+function Base.:(==)(a::T, b::T) where {T<:ComposedField}
+  if a.name != b.name || a.c != b.c || length(a.fields) != length(b.fields)
+    return false
+  end
+  a_ = sort(a.fields, by=x->x.name)
+  b_ = sort(b.fields, by=x->x.name)
+  return a_ == b_
+end
+
 ComposedField(fields::AbstractVector) = ComposedField(nothing, CoordinateSystem(), fields)
 ComposedField(fields...) = ComposedField([fields...])
 
