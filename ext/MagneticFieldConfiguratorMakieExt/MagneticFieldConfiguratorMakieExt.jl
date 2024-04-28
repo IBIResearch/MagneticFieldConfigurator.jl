@@ -2,10 +2,12 @@ module MagneticFieldConfiguratorMakieExt
 
 using MagneticFieldConfigurator, Makie
 
-function Makie.plot!(ax, coilarray, shift=[0,0,0], scale=1)
+function Makie.plot!(ax, cc::ComposedField, shift=[0,0,0], scale=1)
 
-  for l=1:length(coilarray)
-    plot!(ax, coilarray[l], shift, scale)
+  for l=1:length(cc.fields)
+    if typeof(cc.fields[l]) <: Coil
+      plot!(ax, cc.fields[l], shift, scale)
+    end
   end
   return
 end

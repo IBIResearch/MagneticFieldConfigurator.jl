@@ -1,6 +1,7 @@
 using MagneticFieldConfigurator
 using Test
 using CairoMakie
+using LinearAlgebra
 
 
 include("general.jl")

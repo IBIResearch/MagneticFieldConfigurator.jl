@@ -40,9 +40,9 @@ let
   c2 = RectangularCoil("test", CoordinateSystem(dirX,dirY,[0,0,side+len]), 
 			          1, -40, side, side, 0, len, len)
 
-  plot!(ax1, [c1,c2], [0,0,0], 100)
-	
   cc = c1+c2
+	
+  plot!(ax1, cc, [0,0,0], 100)
 
   z_ = range(-0.05,0.18,length=20)
   x_ = range(-0.08,0.08,length=20)
@@ -83,9 +83,9 @@ let
   c2 = CircularCoil("test", CoordinateSystem(-dirX,dirY,[0,0,dist]), 
 			          -1, 40, radius, len, thick)
 
-  plot!(ax1, [c1,c2], [0,0,0], 100)
-	
   cc = c1+c2
+	
+  plot!(ax1, cc, [0,0,0], 100)
 
   z_ = range(0.005,dist-0.005,length=25)
   x_ = range(-dist/2,+dist/2,length=20)
@@ -146,9 +146,9 @@ let
   c2 = RectangularCoil("test", CoordinateSystem(-dirX,dirY,[0,0,dist]), 
 			          -1, 40, side, side, 0, len, thick)
 
-  plot!(ax1, [c1,c2], [0,0,0], 100)
-	
   cc = c1+c2
+	
+  plot!(ax1, cc, [0,0,0], 100)
 
   #z_ = range(0.005,dist-0.005,length=25)
   #x_ = range(-dist/2,+dist/2,length=20)
