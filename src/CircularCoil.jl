@@ -8,9 +8,13 @@ struct CircularCoil <: Coil
   radius::Float64
   length::Float64
   thickness::Float64
+
+  CircularCoil(name::Union{String,Nothing}, args...) = new(newFieldName(CircularCoil,name), args...)
 end
 
-CircularCoil(name,I,radius) = CircularCoil(name,I,radius,1.0,0.0,0.0)
+#CircularCoil(name::String, c::CoordinateSystem, I, radius) = CircularCoil(name, c, I,radius,1.0,0.0,0.0)
+CircularCoil(c::CoordinateSystem, args...) = CircularCoil(nothing, c, args...)
+
 
 function toDict(c::CircularCoil)
   params = invoke(toDict, Tuple{Coil}, c)
@@ -24,13 +28,13 @@ end
 
 function CircularCoil(params::Dict)
   name = params["name"]
-  c = CoordinateSystem(params["coordinates"])
+  c = CoordinateSystem(params)
   I = params["current"]
   radius = params["radius"]
   length = params["length"]
   thickness = params["thickness"]
   windings = params["windings"]
-  return CircularCoil(name,c,I,radius,windings,length,thickness)
+  return CircularCoil(name,c,I,windings,radius,length,thickness)
 end
 
 function getWire(c::CircularCoil)

@@ -1,24 +1,29 @@
-export GradientField
+export GradientField, ComposedField
 
 import Base: +
 
 struct ComposedField <: AbstractField
   name::String
   c::CoordinateSystem
-  fields::Vector
+  fields::Vector{AbstractField}
+
+  ComposedField(name::Union{String,Nothing}, args...) = new(newFieldName(ComposedField,name), args...)
 end
 
-ComposedField(fields::Vector) = ComposedField("", CoordinateSystem(), fields)
+ComposedField(fields::AbstractVector) = ComposedField(nothing, CoordinateSystem(), fields)
+ComposedField(fields...) = ComposedField([fields...])
 
 function ComposedField(params::Dict)
   name = params["name"]
-  c = CoordinateSystem(params["coordinates"])
+  c = CoordinateSystem(params)
   delete!(params,"name")
   delete!(params,"coordinates")
   delete!(params,"type")
   fields = AbstractField[]
   for (key,value) in params
-    push!(fields, AbstractField(value))
+    if typeof(value) <: Dict
+      push!(fields, AbstractField(value))
+    end
   end
   return ComposedField(name,c,fields)
 end
@@ -37,7 +42,7 @@ end
 +(a::AbstractField,b::ComposedField) = ComposedField([a,b.fields...])
 +(a::ComposedField,b::ComposedField) = ComposedField([a.fields...,b.fields...])
 
-function getindex(c::ComposedField, pos::Vector)
+function Base.getindex(c::ComposedField, pos::AbstractVector)
   B = zeros(Float64,3)
   for l=1:length(c.fields)
     B[:] .+= c.fields[l][pos]

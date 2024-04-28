@@ -5,6 +5,10 @@ struct CoordinateSystem
   center::SVector{3,Float64}
 end
 
+function Base.:(==)(a::T, b::T) where {T<:CoordinateSystem}
+  return a.basis == b.basis && a.center == b.center  
+end
+
 function CoordinateSystem(x,y,center)
   x_ = normalize(x)
   y_ = normalize(y)
@@ -25,8 +29,9 @@ function toDict(c::CoordinateSystem)
   return params
 end
 
-CoordinateSystem(x::Vector,y::Vector) = CoordinateSystem(x,y,zeros(3))
+CoordinateSystem(x::AbstractVector,y::AbstractVector) = CoordinateSystem(x,y,zeros(3))
 CoordinateSystem() = CoordinateSystem([1.0,0.0,0.0],[0.0,1.0,0.0])
+CoordinateSystem(center::AbstractVector) = CoordinateSystem(SA[1,0,0],SA[0,1,0],center)
 
 fromLocalToGlobalWithoutPosition(c::CoordinateSystem, pos) =
                                  c.basis*pos

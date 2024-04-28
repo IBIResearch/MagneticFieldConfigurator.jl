@@ -1,6 +1,6 @@
 abstract type MagneticDipoleField <: AbstractField end
 
-function getindex(c::MagneticDipoleField, pos::Vector)
+function Base.getindex(c::MagneticDipoleField, pos::AbstractVector)
   B = zeros(3)
 
   posLocal = fromGlobalToLocal(c.c, pos)

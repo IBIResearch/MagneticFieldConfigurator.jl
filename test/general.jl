@@ -1,3 +1,5 @@
+@testset "General" begin
+  
 x = range(-1,stop=1,length=100)
 I = 100
 r = 0.5
@@ -7,7 +9,7 @@ biotSavartCirc(x,I,r) = I*4*pi*1e-7/2*r^2/((r^2+x^2)^(3/2))
 c = CircularCoil("test", CoordinateSystem(), I, 1, r, 0, 0)
 
 for x_ in x
-  B1 = c[[x_,0,0]][1]
+  B1 = c[SA[x_,0,0]][1]
   B2 = biotSavartCirc(x_,I,r)
   @test abs( B1 - B2 ) / abs(B2) < 1e-14
 end
@@ -49,3 +51,5 @@ for x_ in x
   @test abs( B1 - B2 ) / abs(B2) < 1e-4
 end
 =#
+
+end

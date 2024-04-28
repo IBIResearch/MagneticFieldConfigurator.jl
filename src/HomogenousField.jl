@@ -3,12 +3,12 @@ export HomogenousField
 struct HomogenousField <: AbstractField
   name::String
   c::CoordinateSystem
-  A::Vector{Float64}
+  A::AbstractVector{Float64}
 end
 
-HomogenousField(A::Vector{Float64}) = HomogenousField(CoordinateSystem(), A)
+HomogenousField(A::AbstractVector{Float64}) = HomogenousField(CoordinateSystem(), A)
 
-function getindex(field::HomogenousField, pos::Vector)
+function Base.getindex(field::HomogenousField, pos::AbstractVector)
   posLocal = fromGlobalToLocal(field.c, pos)
   return fromLocalToGlobalWithoutPosition(field.c, field.A)
 end

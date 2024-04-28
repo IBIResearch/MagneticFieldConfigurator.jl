@@ -2,7 +2,7 @@ export Coil, couplingFactor, inductance, getGlobalWire
 
 abstract type Coil <: AbstractField end
 
-getindex(c::Coil, pos::Vector) = c.I * sensitivity(c, pos)
+Base.getindex(c::Coil, pos::AbstractVector) = c.I * sensitivity(c, pos)
 
 function toDict(c::Coil)
   params = invoke(toDict, Tuple{AbstractField}, c)
@@ -10,7 +10,7 @@ function toDict(c::Coil)
   return params
 end
 
-function sensitivity(c::Coil, pos::Vector)
+function sensitivity(c::Coil, pos::AbstractVector)
   B = zeros(3)
 
   posLocal = fromGlobalToLocal(c.c, pos)

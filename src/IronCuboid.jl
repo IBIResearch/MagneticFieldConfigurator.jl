@@ -74,7 +74,7 @@ function initGrid(c::IronCuboid)
 end
 
 
-function getindex(c::IronCuboid, pos::Vector)
+function Base.getindex(c::IronCuboid, pos::AbstractVector)
   B = zeros(3)
 
   posLocal = fromGlobalToLocal(c.c, pos)

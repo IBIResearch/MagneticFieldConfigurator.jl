@@ -10,6 +10,8 @@ struct RectangularCoil <: Coil
   cornerRadius::Float64
   length::Float64
   thickness::Float64
+
+  RectangularCoil(name, args...) = new(newFieldName(RectangularCoil,name), args...)
 end
 
 function toDict(c::RectangularCoil)
@@ -26,7 +28,7 @@ end
 
 function RectangularCoil(params::Dict)
   name = params["name"]
-  c = CoordinateSystem(params["coordinates"])
+  c = CoordinateSystem(params)
   I = params["current"]
   sideA = params["sideA"]
   sideB = params["sideB"]
