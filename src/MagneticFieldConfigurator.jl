@@ -6,6 +6,9 @@ using TOML
 using LinearAlgebra, Statistics
 using FileIO
 
+export μ₀
+
+const μ₀ = 4π*1e-7
 
 function __init__()
   #detect_toml(io) = endswith(io.name,".toml>")
