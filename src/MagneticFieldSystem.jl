@@ -15,6 +15,13 @@ function MagneticFieldSystem(params::Dict)
   return MagneticFieldSystem(generators, source)
 end
 
+function MagneticFieldSystem(filename::String)
+  params = TOML.parsefile(filename)
+  generators = AbstractField(params["FieldGenerators"])
+  source = CurrentSource(params["CurrentSource"], generators)
+  return MagneticFieldSystem(generators, source)
+end
+
 function toFile(filename::String, fs::MagneticFieldSystem)
   open(filename,"w") do fd
     params = Dict{String,Any}()
@@ -24,11 +31,5 @@ function toFile(filename::String, fs::MagneticFieldSystem)
   end
 end
 
-function fromFile(filename::String)
-  params = TOML.parsefile(filename)
-  generators = AbstractField(params["FieldGenerators"])
-  source = CurrentSource(params["CurrentSource"], generators)
-  return MagneticFieldSystem(generators, source)
-end
 
 

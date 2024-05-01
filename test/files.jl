@@ -11,7 +11,7 @@
 
 
   toFile("test.toml", system)
-  systemFromFile = fromFile("test.toml")
+  systemFromFile = MagneticFieldSystem("test.toml")
 
   @test system == systemFromFile
 
