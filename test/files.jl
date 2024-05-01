@@ -21,7 +21,7 @@
   x_ = range(-0.15,0.15,length=25)
   y_ = range(-0.15,0.15,length=20)
 	
-  current!(source, [I,I,I,I])
+  current!(source, [I,-I,I,-I])
 
   field = [norm(generators[x,y,0.0]) for y in y_, x in x_]
   maxfield = maximum(field)*0.1

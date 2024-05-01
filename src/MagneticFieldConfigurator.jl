@@ -29,4 +29,7 @@ include("IronCuboid.jl")
 include("CurrentSource.jl")
 include("MagneticFieldSystem.jl")
 
+export viewer
+function viewer end
+
 end
