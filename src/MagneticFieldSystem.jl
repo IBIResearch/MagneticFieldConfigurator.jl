@@ -10,16 +10,16 @@ function Base.:(==)(a::T, b::T) where {T<:MagneticFieldSystem}
 end
 
 function MagneticFieldSystem(params::Dict)
-  generators = ComposedField(params["FieldGenerators"])
-  source = CurrentSource(params["CurrentSource"])
+  generatorsDict = params["FieldGenerators"]
+  generatorsDict["name"] = "FieldGenerators"
+  generators = AbstractField(generatorsDict)
+  source = CurrentSource(params["CurrentSource"], generators)
   return MagneticFieldSystem(generators, source)
 end
 
 function MagneticFieldSystem(filename::String)
   params = TOML.parsefile(filename)
-  generators = AbstractField(params["FieldGenerators"])
-  source = CurrentSource(params["CurrentSource"], generators)
-  return MagneticFieldSystem(generators, source)
+  MagneticFieldSystem(params)
 end
 
 function toFile(filename::String, fs::MagneticFieldSystem)

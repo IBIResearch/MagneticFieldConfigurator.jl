@@ -41,7 +41,6 @@ Base.getindex(field::AbstractField,x,y,z) = field[SA[x,y,z]]
 
 function toDict(field::AbstractField)
   params = Dict{String,Any}()
-  params["name"] = field.name
   params["center"] = field.c.center
   params["basis"] = vec(field.c.basis)
   return params

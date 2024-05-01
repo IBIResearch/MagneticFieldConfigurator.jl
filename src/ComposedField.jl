@@ -19,18 +19,17 @@ end
 
 Base.length(c::ComposedField) = length(c.fields)
 
+ComposedField(name::String, fields::AbstractVector) = ComposedField(name, CoordinateSystem(), fields)
 ComposedField(fields::AbstractVector) = ComposedField(nothing, CoordinateSystem(), fields)
 ComposedField(fields...) = ComposedField([fields...])
 
 function ComposedField(params::Dict)
   name = params["name"]
   c = CoordinateSystem(params)
-  delete!(params,"name")
-  delete!(params,"coordinates")
-  delete!(params,"type")
   fields = AbstractField[]
   for (key,value) in params
     if typeof(value) <: Dict
+      value["name"] = key
       push!(fields, AbstractField(value))
     end
   end
