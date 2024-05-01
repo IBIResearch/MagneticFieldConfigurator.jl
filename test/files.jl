@@ -7,10 +7,11 @@
   c4 = RectangularCoil(CoordinateSystem(SA[0.1,0,0]), -I, 1, 3*r, 3*r, 0.0, 0, 0)
   generators = ComposedField("FieldGenerators",[c1,c2,c3,c4])
   source = CurrentSource(generators; factors=Float64[1,1,1,1], currents=I*ones(length(generators)))
-  system = MagneticFieldSystem(generators, source)
+  receiver = InductiveReceiver(generators; factors = Float64[1,1,1,1])
+  system = MagneticFieldSystem(generators, source, receiver)
 
 
-  toFile("test.toml", system)
+  save("test.toml", system)
   systemFromFile = MagneticFieldSystem("test.toml")
 
   @test system == systemFromFile

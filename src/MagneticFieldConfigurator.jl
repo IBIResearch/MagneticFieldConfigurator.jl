@@ -27,6 +27,7 @@ include("MagneticDipole.jl")
 include("PermanentMagnetCuboid.jl")
 include("IronCuboid.jl")
 include("CurrentSource.jl")
+include("InductiveReceiver.jl")
 include("MagneticFieldSystem.jl")
 
 export viewer

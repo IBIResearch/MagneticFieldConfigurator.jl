@@ -46,12 +46,6 @@ function toDict(field::AbstractField)
   return params
 end
 
-function fileio_save(f::File{format"TOML"}, field::AbstractField)
-  open(filename,"w") do fd
-    TOML.print(fd, toDict(field))
-  end
-end
-
 function AbstractField(params::Dict)
   if params["type"] == "ComposedField"
     return ComposedField(params)
