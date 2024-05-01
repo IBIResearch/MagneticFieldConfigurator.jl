@@ -1,16 +1,16 @@
-export Coil, couplingFactor, inductance, getGlobalWire
+export AbstractCoil, couplingFactor, inductance, getGlobalWire
 
-abstract type Coil <: AbstractField end
+abstract type AbstractCoil <: AbstractField end
 
-Base.getindex(c::Coil, pos::AbstractVector) = c.I * sensitivity(c, pos)
+Base.getindex(c::AbstractCoil, pos::AbstractVector) = c.I * sensitivity(c, pos)
 
-function toDict(c::Coil)
+function toDict(c::AbstractCoil)
   params = invoke(toDict, Tuple{AbstractField}, c)
   params["current"] = c.I
   return params
 end
 
-function sensitivity(c::Coil, pos::AbstractVector)
+function sensitivity(c::AbstractCoil, pos::AbstractVector)
   B = zeros(3)
 
   posLocal = fromGlobalToLocal(c.c, pos)
@@ -24,7 +24,7 @@ function sensitivity(c::Coil, pos::AbstractVector)
   return fromLocalToGlobalWithoutPosition(c.c, c.windings*1e-7 * B)
 end
 
-function magneticVectorPotentialSensitivity(c::Coil, pos)
+function magneticVectorPotentialSensitivity(c::AbstractCoil, pos)
   factor = 1e-7 #*windings;
 
   valueTmp = zeros(3)
@@ -41,7 +41,7 @@ function magneticVectorPotentialSensitivity(c::Coil, pos)
   return fromLocalToGlobalWithoutPosition(c.c, factor * valueTmp)
 end
 
-function couplingFactor(c1::Coil, c2::Coil)
+function couplingFactor(c1::AbstractCoil, c2::AbstractCoil)
   couplingFactor = 0.0
 
   positions, paths = getWire(c1)
@@ -59,9 +59,9 @@ function couplingFactor(c1::Coil, c2::Coil)
   return couplingFactor
 end
 
-inductance(c::Coil) = couplingFactor(c,c)
+inductance(c::AbstractCoil) = couplingFactor(c,c)
 
-function getGlobalWire(c::Coil)
+function getGlobalWire(c::AbstractCoil)
   positions, paths = getWire(c)
   posLoc = [fromLocalToGlobal(c.c, positions[:,l])[d] for d=1:3, l=1:size(positions,2)]
   pathGlob = [fromLocalToGlobalWithoutPosition(c.c, paths[:,l])[d] for d=1:3, l=1:size(paths,2)]

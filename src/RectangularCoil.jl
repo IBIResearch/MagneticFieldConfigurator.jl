@@ -1,6 +1,6 @@
 export RectangularCoil, sensitivity
 
-struct RectangularCoil <: Coil
+mutable struct RectangularCoil <: AbstractCoil
   name::String
   c::CoordinateSystem
   I::Float64
@@ -17,7 +17,7 @@ end
 RectangularCoil(c::CoordinateSystem, args...) = RectangularCoil(nothing, c, args...)
 
 function toDict(c::RectangularCoil)
-  params = invoke(toDict, Tuple{Coil}, c)
+  params = invoke(toDict, Tuple{AbstractCoil}, c)
   params["type"] = "RectangularCoil"
   params["sideA"] = c.sideA
   params["sideB"] = c.sideB

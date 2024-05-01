@@ -1,6 +1,4 @@
-export GradientField, ComposedField
-
-import Base: +
+export ComposedField
 
 struct ComposedField <: AbstractField
   name::String
@@ -18,6 +16,8 @@ function Base.:(==)(a::T, b::T) where {T<:ComposedField}
   b_ = sort(b.fields, by=x->x.name)
   return a_ == b_
 end
+
+Base.length(c::ComposedField) = length(c.fields)
 
 ComposedField(fields::AbstractVector) = ComposedField(nothing, CoordinateSystem(), fields)
 ComposedField(fields...) = ComposedField([fields...])
@@ -46,10 +46,10 @@ function toDict(c::ComposedField)
   return params
 end
 
-+(a::AbstractField,b::AbstractField) = ComposedField([a,b])
-+(a::ComposedField,b::AbstractField) = ComposedField([a.fields...,b])
-+(a::AbstractField,b::ComposedField) = ComposedField([a,b.fields...])
-+(a::ComposedField,b::ComposedField) = ComposedField([a.fields...,b.fields...])
+Base.:(+)(a::AbstractField,b::AbstractField) = ComposedField([a,b])
+Base.:(+)(a::ComposedField,b::AbstractField) = ComposedField([a.fields...,b])
+Base.:(+)(a::AbstractField,b::ComposedField) = ComposedField([a,b.fields...])
+Base.:(+)(a::ComposedField,b::ComposedField) = ComposedField([a.fields...,b.fields...])
 
 function Base.getindex(c::ComposedField, pos::AbstractVector)
   B = zeros(Float64,3)

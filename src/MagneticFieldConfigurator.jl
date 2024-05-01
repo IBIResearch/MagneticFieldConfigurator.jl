@@ -20,13 +20,13 @@ include("AbstractField.jl")
 include("GradientField.jl")
 include("HomogenousField.jl")
 include("ComposedField.jl")
-include("Coil.jl")
+include("AbstractCoil.jl")
 include("CircularCoil.jl")
 include("RectangularCoil.jl")
 include("MagneticDipole.jl")
 include("PermanentMagnetCuboid.jl")
 include("IronCuboid.jl")
-
-
+include("CurrentSource.jl")
+include("MagneticFieldSystem.jl")
 
 end

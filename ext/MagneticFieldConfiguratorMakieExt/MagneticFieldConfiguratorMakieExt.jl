@@ -5,14 +5,14 @@ using MagneticFieldConfigurator, Makie
 function Makie.plot!(ax, cc::ComposedField, shift=[0,0,0], scale=1)
 
   for l=1:length(cc.fields)
-    if typeof(cc.fields[l]) <: Coil
+    if typeof(cc.fields[l]) <: AbstractCoil
       plot!(ax, cc.fields[l], shift, scale)
     end
   end
   return
 end
 
-function Makie.plot!(ax, coil::Coil, shift=[0,0,0], scale=1)
+function Makie.plot!(ax, coil::AbstractCoil, shift=[0,0,0], scale=1)
   pos, path = getGlobalWire(coil)
 
   x = pos[1,:].*scale .+shift[1]

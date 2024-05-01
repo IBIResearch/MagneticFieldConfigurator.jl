@@ -1,6 +1,6 @@
 export CircularCoil, sensitivity
 
-struct CircularCoil <: Coil
+mutable struct CircularCoil <: AbstractCoil
   name::String
   c::CoordinateSystem
   I::Float64
@@ -16,7 +16,7 @@ CircularCoil(c::CoordinateSystem, args...) = CircularCoil(nothing, c, args...)
 
 
 function toDict(c::CircularCoil)
-  params = invoke(toDict, Tuple{Coil}, c)
+  params = invoke(toDict, Tuple{AbstractCoil}, c)
   params["type"] = "CircularCoil"
   params["radius"] = c.radius
   params["length"] = c.length

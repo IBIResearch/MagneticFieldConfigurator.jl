@@ -1,4 +1,4 @@
-export AbstractField, toDict, fromFile, toFile, gradient
+export AbstractField, toDict, gradient
 
 abstract type AbstractField end
 
@@ -47,23 +47,10 @@ function toDict(field::AbstractField)
   return params
 end
 
-function toFile(filename::String, field::AbstractField)
-  open(filename,"w") do fd
-    params = Dict{String,Any}()
-    params[field.name] = toDict(field)
-    TOML.print(fd, params)
-  end
-end
-
 function fileio_save(f::File{format"TOML"}, field::AbstractField)
   open(filename,"w") do fd
     TOML.print(fd, toDict(field))
   end
-end
-
-function fromFile(filename::String)
-  params = TOML.parsefile("test.toml")
-  return AbstractField(first(params)[2])
 end
 
 function AbstractField(params::Dict)
