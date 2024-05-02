@@ -9,6 +9,8 @@ function Base.:(==)(a::T, b::T) where {T<:InductiveReceiver}
   return a.connectedCoils == b.connectedCoils && a.factors == b.factors 
 end
 
+Base.length(c::InductiveReceiver) = length(c.connectedCoils)
+
 function InductiveReceiver(connectedCoils::Vector{<:Vector{<:AbstractField}}; 
                        factors = nothing)
   if factors == nothing

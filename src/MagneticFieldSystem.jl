@@ -1,4 +1,4 @@
-export MagneticFieldSystem, save, fromFile
+export MagneticFieldSystem, save, fromFile, txSensitivities, rxSensitivities
 
 @kwdef struct MagneticFieldSystem
   generators::ComposedField
@@ -42,5 +42,24 @@ function FileIO.save(filename::String, fs::MagneticFieldSystem)
   end
 end
 
+function txSensitivities(fs::MagneticFieldSystem, pos::AbstractVector)
+  txSens = zeros(Float64,3,length(fs.source))
+  for i=1:length(fs.source)
+    for l=1:length(fs.source.connectedCoils[i])
+      txSens[:,i] .+= sensitivity(fs.source.connectedCoils[i][l], pos) *
+                      fs.source.factors[i][l]
+    end
+  end
+  return txSens
+end
 
-
+function rxSensitivities(fs::MagneticFieldSystem, pos::AbstractVector)
+  rxSens = zeros(Float64,3,length(fs.receiver))
+  for i=1:length(fs.receiver)
+    for l=1:length(fs.receiver.connectedCoils[i])
+      rxSens[:,i] .+= sensitivity(fs.receiver.connectedCoils[i][l], pos) *
+                      fs.receiver.factors[i][l]
+    end
+  end
+  return rxSens
+end

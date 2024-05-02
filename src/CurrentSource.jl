@@ -10,6 +10,8 @@ function Base.:(==)(a::T, b::T) where {T<:CurrentSource}
   return a.connectedCoils == b.connectedCoils && a.factors == b.factors && a.currents == b.currents
 end
 
+Base.length(c::CurrentSource) = length(c.connectedCoils)
+
 function CurrentSource(connectedCoils::Vector{<:Vector{<:AbstractField}}; 
                        factors = nothing, currents::Vector{Float64} = zeros(length(connectedCoils)))
   if factors == nothing
