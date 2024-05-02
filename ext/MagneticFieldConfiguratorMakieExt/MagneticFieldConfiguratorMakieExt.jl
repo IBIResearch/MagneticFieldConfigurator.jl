@@ -22,6 +22,22 @@ function Makie.plot!(ax, coil::AbstractCoil, shift=[0,0,0], scale=1)
   # linestyle = :dotted
   return
 end
+
+function Makie.plot!(ax, system::MagneticFieldSystem)
+  plot!(ax, system.generators)
+  return
+end
+
+function Makie.plot!(ax, c::CoordinateSystem)
+
+  centerP = Point3f(c.center...)
+  factor = 0.01
+  arrows!(ax, [centerP,centerP,centerP], [ Point3f(c.basis[:,1]...)*2*factor, 
+     Point3f(c.basis[:,2]...)*factor, Point3f(c.basis[:,3]...)*factor], 
+    linewidth=factor/8, color=[:green,:blue,:red], arrowsize=factor/4)
+
+  return
+end
   
 
 function MagneticFieldConfigurator.viewer(system::MagneticFieldSystem)
