@@ -24,7 +24,7 @@ end
 function CurrentSource(connectedCoils::Vector{<:AbstractField}; factors = nothing, kargs...)
   connectedCoils_ = [AbstractCoil[connectedCoils[i]] for i=1:length(connectedCoils)]
   if factors == nothing
-    factors_ = [ones(length(connectedCoils[i])) for i=1:length(connectedCoils)]
+    factors_ = [ones(length(connectedCoils_[i])) for i=1:length(connectedCoils)]
   else
     factors_ = [[factors[i]] for i=1:length(connectedCoils)]
   end
