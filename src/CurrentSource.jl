@@ -1,9 +1,10 @@
 export CurrentSource, current!
 
-@kwdef struct CurrentSource
+mutable struct CurrentSource
   connectedCoils::Vector{Vector{AbstractCoil}}
   factors::Vector{Vector{Float64}}
   currents::Vector{Float64}
+  maxCurrents::Vector{Float64}
 end
 
 function Base.:(==)(a::T, b::T) where {T<:CurrentSource}
@@ -13,12 +14,14 @@ end
 Base.length(c::CurrentSource) = length(c.connectedCoils)
 
 function CurrentSource(connectedCoils::Vector{<:Vector{<:AbstractField}}; 
-                       factors = nothing, currents::Vector{Float64} = zeros(length(connectedCoils)))
+                       factors = nothing, currents::Vector{Float64} = zeros(length(connectedCoils)),
+                       maxCurrents::Vector{Float64} = ones(length(connectedCoils)))
+
   if factors == nothing
     factors = [ones(length(connectedCoils[i])) for i=1:length(connectedCoils)]
   end
 
-  return CurrentSource(;connectedCoils,factors,currents)
+  return CurrentSource(connectedCoils,factors,currents,maxCurrents)
 end
 
 function CurrentSource(connectedCoils::Vector{<:AbstractField}; factors = nothing, kargs...)
@@ -41,7 +44,8 @@ function CurrentSource(params::Dict, generators::ComposedField)
 
   factors = params["factors"]
   currents = params["currents"]
-  return CurrentSource(connectedCoils,factors,currents)
+  maxCurrents = get(params, "maxCurrents", zeros(length(currents)))
+  return CurrentSource(connectedCoils,factors,currents,maxCurrents)
 end
 
 function toDict(c::CurrentSource)
@@ -50,6 +54,7 @@ function toDict(c::CurrentSource)
   params["connectedCoils"] = connectedCoilsStr
   params["factors"] = c.factors
   params["currents"] = c.currents
+  params["maxCurrents"] = c.maxCurrents
   return params
 end
 

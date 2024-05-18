@@ -1,6 +1,6 @@
 export InductiveReceiver
 
-@kwdef struct InductiveReceiver
+mutable struct InductiveReceiver
   connectedCoils::Vector{Vector{AbstractCoil}}
   factors::Vector{Vector{Float64}}
 end
@@ -17,7 +17,7 @@ function InductiveReceiver(connectedCoils::Vector{<:Vector{<:AbstractField}};
     factors = [ones(length(connectedCoils[i])) for i=1:length(connectedCoils)]
   end
 
-  return InductiveReceiver(;connectedCoils,factors)
+  return InductiveReceiver(connectedCoils,factors)
 end
 
 function InductiveReceiver(connectedCoils::Vector{<:AbstractField}; factors = nothing)

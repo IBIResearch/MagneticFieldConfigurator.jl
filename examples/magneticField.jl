@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.41
+# v0.19.42
 
 using Markdown
 using InteractiveUtils
@@ -71,30 +71,28 @@ let
   	         viewmode=:fitzoom)
   #ax1 = LScene(fig[1,1:4])
 	
-  len = 0.01
-  thick = 0.01
-  dist = 0.1
-  radius = dist/2 + thick
+  len = 0.025
+  thick = 0.025
+  dist = 0.25
+  radius = dist + thick
   dirX = [0,0,1]
   dirY = [0,1,0]
 	
-  c1 = CircularCoil("test", CoordinateSystem(dirX,dirY,[0,0,0]), 
-			          1, 40, radius, len, thick)
-  c2 = CircularCoil("test", CoordinateSystem(-dirX,dirY,[0,0,dist]), 
-			          -1, 40, radius, len, thick)
+  c1 = CircularCoil("test", CoordinateSystem(dirX,dirY,[0,0,-dist/2]), 
+			          15, 100, radius, len, thick)
+  c2 = CircularCoil("test", CoordinateSystem(-dirX,dirY,[0,0,dist/2]), 
+			          -15, 100, radius, len, thick)
 
   cc = c1+c2
 	
   plot!(ax1, cc, [0,0,0], 100)
 
-  z_ = range(0.005,dist-0.005,length=25)
-  x_ = range(-dist/2,+dist/2,length=20)
 
-  z_ = range(-dist/2,dist*3/2,length=25)
-  x_ = range(-dist,+dist,length=20)
+  z_ = range(-dist*2,dist*2,length=35)
+  x_ = range(-dist*2,dist*2,length=30)
 	
   field = [norm(cc[x,0.0,z]) for z in z_, x in x_]
-  maxfield = 1.0
+  maxfield = 30.0
 	
   ax2 = Axis(fig[2,1], xlabel = "x / cm", ylabel = "z / cm")
   pl = heatmap!(ax2, x_.*100, z_.*100, field' * 1000, colorrange = (0,maxfield) )
@@ -103,14 +101,15 @@ let
   pl2 = heatmap!(ax1, x_.*100, z_.*100, field' * 1000; transformation=(:xz, 0.0),  
                     colorrange = (0,maxfield) )
 	
-  z_ = range(0.04,0.06,length=25)
-  x_ = range(-0.02,0.02,length=20)
+  z_ = range(-0.045,0.045,length=25)
+  x_ = range(-0.045,0.045,length=20)
 	
-  field = [norm(cc[x,0.0,z]) for z in z_, x in x_]
+  #field = [norm(cc[x,0.0,z]) for z in z_, x in x_]
+  field = [cc[x,0.0,z][3] for z in z_, x in x_]
 
   @info (maximum(field)-minimum(field)) / (minimum(field))
 
-  @info " Inductance = $(inductance(c1)*1e6) μH"
+  #@info " Inductance = $(inductance(c1)*1e6) μH"
 	
   ax3 = Axis(fig[2,3], xlabel = "x / cm", ylabel = "z / cm")
   pl = heatmap!(ax3, x_.*100, z_.*100, field' * 1000 )
@@ -134,17 +133,18 @@ let
   	         viewmode=:fitzoom) 
   #ax1 = LScene(fig[1,1:4])
 	
-  len = 0.01
-  thick = 0.01
-  dist = 0.1
-  side = dist + 2*thick
+  len = 0.025
+  thick = 0.025
+  dist = 0.25
+  #side = dist + 2*thick
+  side = 0.5 + 2*thick
   dirX = [0,0,1]
   dirY = [0,1,0]
 	
-  c1 = RectangularCoil("test", CoordinateSystem(dirX,dirY,[0,0,0]), 
-			          1, 40, side, side, 0, len, thick)
-  c2 = RectangularCoil("test", CoordinateSystem(-dirX,dirY,[0,0,dist]), 
-			          -1, 40, side, side, 0, len, thick)
+  c1 = RectangularCoil("test", CoordinateSystem(dirX,dirY,[0,0,-dist/2]), 
+			          15, 100, side, side, 0, len, thick)
+  c2 = RectangularCoil("test", CoordinateSystem(-dirX,dirY,[0,0,dist/2]), 
+			          -15, 100, side, side, 0, len, thick)
 
   cc = c1+c2
 	
@@ -152,12 +152,12 @@ let
 
   #z_ = range(0.005,dist-0.005,length=25)
   #x_ = range(-dist/2,+dist/2,length=20)
-  z_ = range(-dist/2,dist*3/2,length=25)
+  z_ = range(-dist,dist,length=25)
   x_ = range(-dist,+dist,length=20)
 	
   field = [norm(cc[x,0.0,z]) for z in z_, x in x_]
 	
-  maxfield = 1.0
+  maxfield = 10.0
   pl2 = heatmap!(ax1, x_.*100, z_.*100, field' * 1000; transformation=(:xz, 0.0),
                  colorrange = (0,maxfield))
 	
@@ -165,13 +165,15 @@ let
   pl = heatmap!(ax2, x_.*100, z_.*100, field' * 1000, colorrange = (0,maxfield) )
   Colorbar(fig[2, 2], pl, label="H / mT")
 
-  z_ = range(0.04,0.06,length=25)
-  x_ = range(-0.02,0.02,length=20)
+  z_ = range(-0.05,0.05,length=25)
+  x_ = range(-0.05,0.05,length=20)
 	
-  field = [norm(cc[x,0.0,z]) for z in z_, x in x_]
+  #field = [norm(cc[x,0.0,z]) for z in z_, x in x_]
+  field = [cc[x,0.0,z][3] for z in z_, x in x_]
+
 
   @info (maximum(field)-minimum(field)) / (minimum(field))
-  @info " Inductance = $(inductance(c1)*1e6) μH"
+  #@info " Inductance = $(inductance(c1)*1e6) μH"
 	
   ax3 = Axis(fig[2,3], xlabel = "x / cm", ylabel = "z / cm")
   pl = heatmap!(ax3, x_.*100, z_.*100, field' * 1000 )
