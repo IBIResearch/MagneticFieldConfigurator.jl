@@ -15,7 +15,7 @@ Base.length(c::CurrentSource) = length(c.connectedCoils)
 
 function CurrentSource(connectedCoils::Vector{<:Vector{<:AbstractField}}; 
                        factors = nothing, currents::Vector{Float64} = zeros(length(connectedCoils)),
-                       maxCurrents::Vector{Float64} = ones(length(connectedCoils)))
+                       maxCurrents::Vector{Float64} = fill(Inf,length(connectedCoils)))
 
   if factors == nothing
     factors = [ones(length(connectedCoils[i])) for i=1:length(connectedCoils)]
@@ -44,7 +44,7 @@ function CurrentSource(params::Dict, generators::ComposedField)
 
   factors = params["factors"]
   currents = params["currents"]
-  maxCurrents = get(params, "maxCurrents", zeros(length(currents)))
+  maxCurrents = get(params, "maxCurrents", fill(Inf,length(currents)))
   return CurrentSource(connectedCoils,factors,currents,maxCurrents)
 end
 
