@@ -42,6 +42,24 @@ function FileIO.save(filename::String, fs::MagneticFieldSystem)
   end
 end
 
+function Base.write(file::HDF5.File, fs::MagneticFieldSystem; path="/fieldSystem")
+  buf = IOBuffer()
+  params = Dict{String,Any}()
+  params["FieldGenerators"] = toDict(fs.generators)
+  params["CurrentSource"] = toDict(fs.source)
+  params["InductiveReceiver"] = toDict(fs.receiver)
+  TOML.print(buf, params)
+  str = String(take!(buf))
+  write(file, path, str)
+  return
+end
+
+function MagneticFieldSystem(file::HDF5.File; path="/fieldSystem")
+  str = read(file, path)
+  params = TOML.parse(str)
+  return MagneticFieldSystem(params)
+end
+
 function txSensitivities(fs::MagneticFieldSystem, pos::AbstractVector)
   txSens = zeros(Float64,3,length(fs.source))
   for i=1:length(fs.source)

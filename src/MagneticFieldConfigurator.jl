@@ -5,6 +5,7 @@ using Reexport
 using TOML
 using LinearAlgebra, Statistics
 using FileIO
+using HDF5
 
 export μ₀
 

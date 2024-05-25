@@ -16,6 +16,17 @@
 
   @test system == systemFromFile
 
+
+  h5open("test.h5", "w") do file
+    write(file, system)
+  end
+
+  systemFromHDFFile = h5open("test.h5", "r") do file
+    MagneticFieldSystem(file)
+  end
+  
+  @test system == systemFromHDFFile
+
   fig = Figure()
   ax = Axis3(fig[1,1], xlabel = "x / cm", ylabel = "y / cm", zlabel = "z / cm")
 
