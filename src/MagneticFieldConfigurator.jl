@@ -17,6 +17,7 @@ function __init__()
 end
 
 include("CoordinateSystem.jl")
+include("BoundingBox.jl")
 include("AbstractField.jl")
 include("GradientField.jl")
 include("HomogenousField.jl")

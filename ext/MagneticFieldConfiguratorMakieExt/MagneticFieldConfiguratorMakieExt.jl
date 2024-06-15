@@ -39,15 +39,17 @@ function Makie.plot!(ax, system::MagneticFieldSystem)
   return
 end
 
-function Makie.plot!(ax, c::CoordinateSystem)
+function Makie.plot!(ax, c::CoordinateSystem; scale=1)
 
   centerP = Point3f(c.center...)
-  factor = 0.01
-  arrows!(ax, [centerP,centerP,centerP], [ Point3f(c.basis[:,1]...)*factor, 
+
+  factor = 0.01*scale
+
+  pl = arrows!(ax, [centerP,centerP,centerP], [ Point3f(c.basis[:,1]...)*factor, 
      Point3f(c.basis[:,2]...)*factor, Point3f(c.basis[:,3]...)*2*factor], 
     linewidth=factor/8, color=[colors[2],colors[1],:black], arrowsize=factor/4)
 
-  return
+  return pl
 end
   
 

@@ -57,3 +57,5 @@ function Base.getindex(c::ComposedField, pos::AbstractVector)
   end
   return B
 end
+
+BoundingBox(c::ComposedField) = BoundingBox([BoundingBox(c.fields[i]) for i=1:length(c.fields)])

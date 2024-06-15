@@ -4,18 +4,23 @@ export MagneticFieldSystem, save, fromFile, txSensitivities, rxSensitivities
   generators::ComposedField
   source::CurrentSource = CurrentSource([[]],[[]],[])
   receiver::InductiveReceiver = InductiveReceiver([[]],[])
+  bbox::BoundingBox
+end
+
+function MagneticFieldSystem(generators::ComposedField, source::CurrentSource, receiver::InductiveReceiver)
+  return MagneticFieldSystem(generators, source, InductiveReceiver([[]],[]), BoundingBox(generators))
 end
 
 function MagneticFieldSystem(generators::ComposedField, source::CurrentSource)
-  return MagneticFieldSystem(generators, source, InductiveReceiver([[]],[]))
+  return MagneticFieldSystem(generators, source, InductiveReceiver([[]],[]), BoundingBox(generators))
 end
 
 function MagneticFieldSystem(generators::ComposedField)
-  return MagneticFieldSystem(generators, CurrentSource([[]],[[]],[]), InductiveReceiver([[]],[]))
+  return MagneticFieldSystem(generators, CurrentSource([[]],[[]],[]), InductiveReceiver([[]],[]), BoundingBox(generators))
 end
 
 function Base.:(==)(a::T, b::T) where {T<:MagneticFieldSystem}
-  return a.generators == b.generators && a.source == b.source && a.receiver == b.receiver
+  return a.generators == b.generators && a.source == b.source && a.receiver == b.receiver && a.bbox == b.bbox
 end
 
 function MagneticFieldSystem(params::Dict)
@@ -24,7 +29,12 @@ function MagneticFieldSystem(params::Dict)
   generators = AbstractField(generatorsDict)
   source = CurrentSource(params["CurrentSource"], generators)
   receiver = InductiveReceiver(params["InductiveReceiver"], generators)
-  return MagneticFieldSystem(generators, source, receiver)
+  if haskey(params, "BoundingBox")
+    bbox = BoundingBox(params["BoundingBox"])
+  else
+    bbox = BoundingBox(generators)
+  end
+  return MagneticFieldSystem(generators, source, receiver, bbox)
 end
 
 function MagneticFieldSystem(filename::String)
@@ -38,6 +48,7 @@ function FileIO.save(filename::String, fs::MagneticFieldSystem)
     params["FieldGenerators"] = toDict(fs.generators)
     params["CurrentSource"] = toDict(fs.source)
     params["InductiveReceiver"] = toDict(fs.receiver)
+    params["BoundingBox"] = toDict(fs.bbox)
     TOML.print(fd, params)
   end
 end
@@ -48,6 +59,7 @@ function Base.write(file::HDF5.File, fs::MagneticFieldSystem; path="/fieldSystem
   params["FieldGenerators"] = toDict(fs.generators)
   params["CurrentSource"] = toDict(fs.source)
   params["InductiveReceiver"] = toDict(fs.receiver)
+  params["BoundingBox"] = toDict(fs.bbox)
   TOML.print(buf, params)
   str = String(take!(buf))
   write(file, path, str)

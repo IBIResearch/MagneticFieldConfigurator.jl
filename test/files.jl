@@ -10,12 +10,12 @@
   receiver = InductiveReceiver(generators; factors = Float64[1,1,1,1])
   system = MagneticFieldSystem(generators, source, receiver)
 
+  @test system.bbox == BoundingBox([0.0, 1.0, 1.0], [0.0, 0.0, 0.0])
 
   save("test.toml", system)
   systemFromFile = MagneticFieldSystem("test.toml")
 
   @test system == systemFromFile
-
 
   h5open("test.h5", "w") do file
     write(file, system)

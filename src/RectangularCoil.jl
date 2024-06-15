@@ -101,3 +101,5 @@ function getWire(c::RectangularCoil)
   end
   return reshape(positions,Val(2)), reshape(paths,Val(2))
 end
+
+BoundingBox(c::RectangularCoil) = BoundingBox([c.length,c.sideA,c.sideB],c.c.center)

@@ -182,9 +182,24 @@ let
   fig
 end
 
+# ╔═╡ 02dc3df0-e270-431e-85d0-bf5807189b4a
+let
+  CairoMakie.activate!()
+  fig = Figure(size=(700,500))
+
+  ax1 = Axis3(fig[1,1:4], azimuth=pi/6, xlabel="x / cm", elevation=0.2,
+	         ylabel="y / cm", zlabel="z / cm", 
+             aspect=:data, protrusions=30,
+  	         xlabeloffset=30, ylabeloffset=30, zlabeloffset=30, 
+  	         viewmode=:fitzoom) 
+	fig
+
+end
+
 # ╔═╡ Cell order:
 # ╠═6977e0b4-0133-11ef-0e3c-69ae73970e30
 # ╠═5665878d-db78-4a94-9706-f2a2bbb189dc
 # ╠═10a00b64-10cb-4128-9634-b860f4c2ac90
 # ╠═83b6d2fe-2a41-4067-b737-5cc3ceb48719
 # ╠═bb921d3e-29b1-47b8-b47b-fd0f737e9e15
+# ╠═02dc3df0-e270-431e-85d0-bf5807189b4a
