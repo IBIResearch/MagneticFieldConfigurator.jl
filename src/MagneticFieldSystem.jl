@@ -8,7 +8,7 @@ export MagneticFieldSystem, save, fromFile, txSensitivities, rxSensitivities
 end
 
 function MagneticFieldSystem(generators::ComposedField, source::CurrentSource, receiver::InductiveReceiver)
-  return MagneticFieldSystem(generators, source, InductiveReceiver([[]],[]), BoundingBox(generators))
+  return MagneticFieldSystem(generators, source, receiver, BoundingBox(generators))
 end
 
 function MagneticFieldSystem(generators::ComposedField, source::CurrentSource)
