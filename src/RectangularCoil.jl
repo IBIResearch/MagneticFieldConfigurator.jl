@@ -10,8 +10,10 @@ mutable struct RectangularCoil <: AbstractCoil
   cornerRadius::Float64
   length::Float64
   thickness::Float64
+  color::RGBA{Float64}
 
-  RectangularCoil(name, args...) = new(newFieldName(RectangularCoil,name), args...)
+  RectangularCoil(name, c, I, windings, sideA, sideB, cornerRadius, length, thickness, color=RGBA(1.0,0.0,0.0,1.0)) = 
+     new(newFieldName(RectangularCoil,name), c, I, windings, sideA, sideB, cornerRadius, length, thickness, color)
 end
 
 RectangularCoil(c::CoordinateSystem, args...) = RectangularCoil(nothing, c, args...)
@@ -25,6 +27,7 @@ function toDict(c::RectangularCoil)
   params["length"] = c.length
   params["thickness"] = c.thickness
   params["windings"] = c.windings
+  params["color"] = [c.color.r, c.color.g, c.color.b, c.color.alpha]
   return params
 end
 
@@ -38,7 +41,10 @@ function RectangularCoil(params::Dict)
   length = params["length"]
   thickness = params["thickness"]
   windings = params["windings"]
-  return RectangularCoil(name,c,I,windings,sideA,sideB,cornerRadius,length,thickness)
+  col = get(params, "color", [1,0,0,1])
+  color = RGBA{Float64}(col[1], col[2], col[3], col[4])
+
+  return RectangularCoil(name,c,I,windings,sideA,sideB,cornerRadius,length,thickness,color)
 end
 
 function getWire(c::RectangularCoil)

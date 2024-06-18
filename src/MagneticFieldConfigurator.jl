@@ -6,6 +6,7 @@ using TOML
 using LinearAlgebra, Statistics
 using FileIO
 using HDF5
+using Colors
 
 export μ₀
 

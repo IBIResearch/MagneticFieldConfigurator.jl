@@ -8,8 +8,10 @@ mutable struct CircularCoil <: AbstractCoil
   radius::Float64
   length::Float64
   thickness::Float64
+  color::RGBA{Float64}
 
-  CircularCoil(name::Union{String,Nothing}, args...) = new(newFieldName(CircularCoil,name), args...)
+  CircularCoil(name::Union{String,Nothing}, c, I, windings, radius, length, thickness, color=RGBA(1.0,0.0,0.0,1.0)) = 
+    new(newFieldName(CircularCoil,name), c, I, windings, radius, length, thickness, color)
 end
 
 CircularCoil(c::CoordinateSystem, args...) = CircularCoil(nothing, c, args...)
@@ -22,6 +24,7 @@ function toDict(c::CircularCoil)
   params["length"] = c.length
   params["thickness"] = c.thickness
   params["windings"] = c.windings
+  params["color"] = [c.color.r, c.color.g, c.color.b, c.color.alpha]
   return params
 end
 
@@ -33,7 +36,9 @@ function CircularCoil(params::Dict)
   length = params["length"]
   thickness = params["thickness"]
   windings = params["windings"]
-  return CircularCoil(name,c,I,windings,radius,length,thickness)
+  col = get(params, "color", [1,0,0,1])
+  color = RGBA{Float64}(col[1], col[2], col[3], col[4])
+  return CircularCoil(name,c,I,windings,radius,length,thickness,color)
 end
 
 function getWire(c::CircularCoil)

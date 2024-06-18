@@ -29,7 +29,7 @@ function Makie.plot!(ax, coil::AbstractCoil, shift=[0,0,0], scale=1)
   x = pos[1,:].*scale .+shift[1]
   y = pos[2,:].*scale .+shift[2]
   z = pos[3,:].*scale .+shift[3]
-  lines!(ax, x, y, z, color = Makie.wong_colors()[1], linewidth = 5)
+  lines!(ax, x, y, z, color = coil.color, linewidth = 5)
   # linestyle = :dotted
   return
 end
