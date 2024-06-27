@@ -28,5 +28,13 @@ Base.minimum(bb::BoundingBox) = bb.center - 0.5*bb.sideLengths
 Base.maximum(bb::BoundingBox) = bb.center + 0.5*bb.sideLengths
 
 BoundingBox(bbA::BoundingBox, bbB::BoundingBox) = BoundingBox(maximum(bbA) - minimum(bbA) + maximum(bbB) - minimum(bbB), 0.5*(minimum(bbA) + maximum(bbA) + minimum(bbB) + maximum(bbB)))
-BoundingBox(bbs::Vector{BoundingBox}) = reduce(BoundingBox, bbs)
+function BoundingBox(bbs::Vector{BoundingBox})
+  minPos = minimum(bbs[1])
+  maxPos = maximum(bbs[1])
+  for i=2:length(bbs)
+    minPos = min.(minPos, minimum(bbs[i]))
+    maxPos = max.(maxPos, maximum(bbs[i]))
+  end
+  return BoundingBox(maxPos - minPos, 0.5*(minPos + maxPos))
+end
 BoundingBox(sideLengths::Vector{Float64}, center::Vector{Float64}) = BoundingBox(SVector{3,Float64}(sideLengths), SVector{3,Float64}(center))

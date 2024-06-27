@@ -10,7 +10,9 @@
   receiver = InductiveReceiver(generators; factors = Float64[1,1,1,1])
   system = MagneticFieldSystem(generators, source, receiver)
 
-  @test system.bbox == BoundingBox([0.0, 1.0, 1.0], [0.0, 0.0, 0.0])
+  @test BoundingBox(c1) == BoundingBox([0.0, 0.2, 0.2], [-0.1, 0.0, 0.0])
+  @test BoundingBox(c3) == BoundingBox([0.0, 0.30000000000000004, 0.30000000000000004], [-0.1, 0.0, 0.0])  
+  @test system.bbox == BoundingBox([0.2, 0.30000000000000004, 0.30000000000000004], [0.0, 0.0, 0.0])
 
   save("test.toml", system)
   systemFromFile = MagneticFieldSystem("test.toml")
