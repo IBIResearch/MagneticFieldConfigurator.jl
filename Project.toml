@@ -17,9 +17,11 @@ FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 
 [weakdeps]
 Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+GLMakie = "e9467ef8-3f7f-5e60-a8f1-6f3e7f5a3f32"
 
 [extensions]
 MagneticFieldConfiguratorMakieExt = "Makie"
+MagneticFieldConfiguratorGLMakieExt = "GLMakie"
 
 [compat]
 HDF5 = "0.15,0.16,0.17"

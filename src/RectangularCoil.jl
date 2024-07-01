@@ -12,7 +12,7 @@ mutable struct RectangularCoil <: AbstractCoil
   thickness::Float64
   color::RGBA{Float64}
 
-  RectangularCoil(name, c, I, windings, sideA, sideB, cornerRadius, length, thickness, color=RGBA(1.0,0.0,0.0,1.0)) = 
+  RectangularCoil(name, c, I, windings, sideA, sideB, cornerRadius, length, thickness, color=RGBA(0/255,73/255,146/255,1.0)) = 
      new(newFieldName(RectangularCoil,name), c, I, windings, sideA, sideB, cornerRadius, length, thickness, color)
 end
 

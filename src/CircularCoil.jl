@@ -10,7 +10,7 @@ mutable struct CircularCoil <: AbstractCoil
   thickness::Float64
   color::RGBA{Float64}
 
-  CircularCoil(name::Union{String,Nothing}, c, I, windings, radius, length, thickness, color=RGBA(1.0,0.0,0.0,1.0)) = 
+  CircularCoil(name::Union{String,Nothing}, c, I, windings, radius, length, thickness, color=RGBA(0/255,73/255,146/255,1.0)) = 
     new(newFieldName(CircularCoil,name), c, I, windings, radius, length, thickness, color)
 end
 

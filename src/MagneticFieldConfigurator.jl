@@ -33,7 +33,15 @@ include("CurrentSource.jl")
 include("InductiveReceiver.jl")
 include("MagneticFieldSystem.jl")
 
+# This is defined in the Makie backend
 export viewer
 function viewer end
+# This is defined in the GLMakie backend
+export display_fig_in_new_window, close!, changeWindowCloseCallback
+function display_fig_in_new_window end
+function close! end
+function changeWindowCloseCallback end
+
+
 
 end
