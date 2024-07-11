@@ -2,8 +2,6 @@ module MagneticFieldConfiguratorMakieExt
 
 using MagneticFieldConfigurator, Makie, LinearAlgebra
 
-export ibicolors
-
 function ibicolors(i::Integer)
   ibicolors_ = [RGBf.(0/255,73/255,146/255), # blue
 	  RGBf.(239/255,123/255,5/255),	# orange (dark)
