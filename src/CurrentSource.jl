@@ -5,23 +5,26 @@ mutable struct CurrentSource
   factors::Vector{Vector{Float64}}
   currents::Vector{Float64}
   maxCurrents::Vector{Float64}
+  factorVoltToCurrent::Vector{Float64}
 end
 
 function Base.:(==)(a::T, b::T) where {T<:CurrentSource}
-  return a.connectedCoils == b.connectedCoils && a.factors == b.factors && a.currents == b.currents
+  return a.connectedCoils == b.connectedCoils && a.factors == b.factors && a.currents == b.currents &&
+         a.maxCurrents == b.maxCurrents && a.factorVoltToCurrent == b.factorVoltToCurrent
 end
 
 Base.length(c::CurrentSource) = length(c.connectedCoils)
 
 function CurrentSource(connectedCoils::Vector{<:Vector{<:AbstractField}}; 
                        factors = nothing, currents::Vector{Float64} = zeros(length(connectedCoils)),
-                       maxCurrents::Vector{Float64} = fill(Inf,length(connectedCoils)))
+                       maxCurrents::Vector{Float64} = fill(Inf,length(connectedCoils)),
+                       factorVoltToCurrent::Vector{Float64} = ones(length(connectedCoils)))
 
   if factors == nothing
     factors = [ones(length(connectedCoils[i])) for i=1:length(connectedCoils)]
   end
 
-  return CurrentSource(connectedCoils,factors,currents,maxCurrents)
+  return CurrentSource(connectedCoils,factors,currents,maxCurrents,factorVoltToCurrent)
 end
 
 function CurrentSource(connectedCoils::Vector{<:AbstractField}; factors = nothing, kargs...)
@@ -45,7 +48,8 @@ function CurrentSource(params::Dict, generators::ComposedField)
   factors = params["factors"]
   currents = params["currents"]
   maxCurrents = get(params, "maxCurrents", fill(Inf,length(currents)))
-  return CurrentSource(connectedCoils,factors,currents,maxCurrents)
+  factorVoltToCurrent = get(params, "factorVoltToCurrent", ones(length(currents)))
+  return CurrentSource(connectedCoils,factors,currents,maxCurrents,factorVoltToCurrent)
 end
 
 function toDict(c::CurrentSource)
@@ -55,6 +59,7 @@ function toDict(c::CurrentSource)
   params["factors"] = c.factors
   params["currents"] = c.currents
   params["maxCurrents"] = c.maxCurrents
+  params["factorVoltToCurrent"] = c.factorVoltToCurrent
   return params
 end
 
