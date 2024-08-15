@@ -1,16 +1,18 @@
-export CurrentSource, current!
+export CurrentSource, current!, absFieldAtUnitCurrentAndReferencePositions
 
 mutable struct CurrentSource
   connectedCoils::Vector{Vector{AbstractCoil}}
   factors::Vector{Vector{Float64}}
   currents::Vector{Float64}
   maxCurrents::Vector{Float64}
-  factorVoltToCurrent::Vector{Float64}
+  factorCurrentToVolt::Vector{Float64}
+  referencePositions::Vector{SVector{3,Float64}}
 end
 
 function Base.:(==)(a::T, b::T) where {T<:CurrentSource}
   return a.connectedCoils == b.connectedCoils && a.factors == b.factors && a.currents == b.currents &&
-         a.maxCurrents == b.maxCurrents && a.factorVoltToCurrent == b.factorVoltToCurrent
+         a.maxCurrents == b.maxCurrents && a.factorCurrentToVolt == b.factorCurrentToVolt &&
+         a.referencePositions == b.referencePositions
 end
 
 Base.length(c::CurrentSource) = length(c.connectedCoils)
@@ -18,13 +20,14 @@ Base.length(c::CurrentSource) = length(c.connectedCoils)
 function CurrentSource(connectedCoils::Vector{<:Vector{<:AbstractField}}; 
                        factors = nothing, currents::Vector{Float64} = zeros(length(connectedCoils)),
                        maxCurrents::Vector{Float64} = fill(Inf,length(connectedCoils)),
-                       factorVoltToCurrent::Vector{Float64} = ones(length(connectedCoils)))
+                       factorCurrentToVolt::Vector{Float64} = ones(length(connectedCoils)),
+                       referencePositions = defaultReferencePositions(connectedCoils))
 
   if factors == nothing
     factors = [ones(length(connectedCoils[i])) for i=1:length(connectedCoils)]
   end
 
-  return CurrentSource(connectedCoils,factors,currents,maxCurrents,factorVoltToCurrent)
+  return CurrentSource(connectedCoils,factors,currents,maxCurrents,factorCurrentToVolt,referencePositions)
 end
 
 function CurrentSource(connectedCoils::Vector{<:AbstractField}; factors = nothing, kargs...)
@@ -48,8 +51,13 @@ function CurrentSource(params::Dict, generators::ComposedField)
   factors = params["factors"]
   currents = params["currents"]
   maxCurrents = get(params, "maxCurrents", fill(Inf,length(currents)))
-  factorVoltToCurrent = get(params, "factorVoltToCurrent", ones(length(currents)))
-  return CurrentSource(connectedCoils,factors,currents,maxCurrents,factorVoltToCurrent)
+  factorCurrentToVolt = get(params, "factorCurrentToVolt", ones(length(currents)))
+  if haskey(params, "referencePositions")
+    referencePositions = [SVector{3,Float64}(params["referencePositions"][3*(i-1)+j] for j=1:3) for i=1:length(connectedCoils)]
+  else
+    referencePositions = defaultReferencePositions(connectedCoils)
+  end
+  return CurrentSource(connectedCoils,factors,currents,maxCurrents,factorCurrentToVolt,referencePositions)
 end
 
 function toDict(c::CurrentSource)
@@ -59,7 +67,8 @@ function toDict(c::CurrentSource)
   params["factors"] = c.factors
   params["currents"] = c.currents
   params["maxCurrents"] = c.maxCurrents
-  params["factorVoltToCurrent"] = c.factorVoltToCurrent
+  params["factorCurrentToVolt"] = c.factorCurrentToVolt
+  params["referencePositions"] = vec([c.referencePositions[i][j] for i=1:length(c.referencePositions) for j=1:3])
   return params
 end
 
@@ -70,4 +79,25 @@ function current!(c::CurrentSource, currents::Vector{Float64})
       c.connectedCoils[i][l].I = c.currents[i]*c.factors[i][l]
     end
   end
+end
+
+
+function defaultReferencePositions(connectedCoils)
+  referencePositions = Vector{SVector{3,Float64}}(undef,length(connectedCoils))
+  for i=1:length(connectedCoils)
+    referencePositions[i] = mean([connectedCoils[i][l].c.center for l=1:length(connectedCoils[i])]) 
+  end
+  return referencePositions
+end
+
+function absFieldAtUnitCurrentAndReferencePositions(c::CurrentSource)
+  absFields = zeros(length(c.connectedCoils))
+  for i=1:length(c.connectedCoils)
+    field = zeros(3)
+    for l=1:length(c.connectedCoils[i])
+      field .+= sensitivity(c.connectedCoils[i][l], c.referencePositions[i]) * c.factors[i][l]
+    end
+    absFields[i] += norm(field)
+  end
+  return absFields
 end

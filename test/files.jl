@@ -45,4 +45,6 @@
 
   plot!(ax, generators)
   save("testComposed.png", fig)
+
+  @info absFieldAtUnitCurrentAndReferencePositions(source)
 end
