@@ -16,12 +16,16 @@ function sensitivity(c::AbstractCoil, pos::AbstractVector)
   posLocal = fromGlobalToLocal(c.c, pos)
   positions, paths = getWire(c)
 
-  for l=1:size(positions,2)
-    posDiff = posLocal - positions[:,l]
-    B[:] .+= cross(paths[:,l], posDiff ./ (norm(posDiff)^3))
-  end
+  _sensitvityInner(B, positions, posLocal, paths)
 
   return fromLocalToGlobalWithoutPosition(c.c, c.windings*1e-7 * B)
+end
+
+function _sensitvityInner(B, positions, posLocal, paths)
+  for l=1:size(positions,2)
+    posDiff = posLocal - positions[:,l]
+    B .+= cross(paths[:,l], posDiff ./ (norm(posDiff)^3))
+  end
 end
 
 function magneticVectorPotentialSensitivity(c::AbstractCoil, pos)
