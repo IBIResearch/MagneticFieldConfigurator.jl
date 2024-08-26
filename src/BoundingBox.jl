@@ -38,3 +38,5 @@ function BoundingBox(bbs::Vector{BoundingBox})
   return BoundingBox(maxPos - minPos, 0.5*(minPos + maxPos))
 end
 BoundingBox(sideLengths::Vector{Float64}, center::Vector{Float64}) = BoundingBox(SVector{3,Float64}(sideLengths), SVector{3,Float64}(center))
+
+Base.in(pos, bbox::BoundingBox) = all(pos .>= minimum(bbox)) && all(pos .<= maximum(bbox))
