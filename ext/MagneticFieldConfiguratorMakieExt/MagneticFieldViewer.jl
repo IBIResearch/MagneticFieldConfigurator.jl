@@ -106,17 +106,17 @@ function MagneticFieldConfigurator.viewer(system::MagneticFieldSystem)
     maxfield = 0.0
     
     if btnShowSliceX.active[]
-      fieldXZ = [norm(system.generators[x,0.0,z]) for z in z_, x in x_]
+      fieldXZ = [norm(system.generators[x,gridcenter[2],z]) for z in z_, x in x_]
       maxfield = max(maximum(fieldXZ), maxfield)
     end
 
     if btnShowSliceY.active[]
-      fieldYZ = [norm(system.generators[0.0,y,z]) for z in z_, y in y_]
+      fieldYZ = [norm(system.generators[gridcenter[1],y,z]) for z in z_, y in y_]
       maxfield = max(maximum(fieldYZ), maxfield)
     end
 
     if btnShowSliceZ.active[]
-      fieldXY = [norm(system.generators[x,y,0.0]) for y in y_, x in x_]
+      fieldXY = [norm(system.generators[x,y,gridcenter[3]]) for y in y_, x in x_]
       maxfield = max(maximum(fieldXY), maxfield)
     end
 
