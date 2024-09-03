@@ -51,7 +51,7 @@ function Makie.plot!(ax, c::CoordinateSystem; scale=1)
 
   pl = arrows!(ax, [centerP,centerP,centerP], [ Point3f(c.basis[:,1]...)*factor, 
      Point3f(c.basis[:,2]...)*factor, Point3f(c.basis[:,3]...)*2*factor], 
-    linewidth=factor/8, color=[ibicolors(2),ibicolors(1),:black], arrowsize=factor/4)
+    linewidth=factor/8, color=[ibicolors(3),ibicolors(1),ibicolors(7)], arrowsize=factor/4)
 
   return pl
 end
