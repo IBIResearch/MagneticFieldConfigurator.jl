@@ -4,7 +4,12 @@ function MagneticFieldConfigurator.viewer(system::MagneticFieldSystem)
 
   fig = Figure(size=(900,700), figure_padding = 10, backgroundcolor = :gray97)
 
-  ax = Axis3(fig[1,1], xlabel = "x / cm", ylabel = "y / cm", zlabel = "z / cm")
+  bbox = system.bbox
+  bbmin = minimum(bbox)
+  bbmax = maximum(bbox)
+  limits = (bbmin[1], bbmax[1], bbmin[2], bbmax[2], bbmin[3], bbmax[3])
+
+  ax = Axis3(fig[1,1], xlabel = "x / cm", ylabel = "y / cm", zlabel = "z / cm", limits=limits)
   cb = Colorbar(fig[1, 2], limits=(0.0,1.0), label="H / mT")
 
   grid = GridLayout(fig[2, 1:2], tellwidth=false, alignmode = Outside(0,0,0,10))
