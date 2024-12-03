@@ -29,37 +29,56 @@ function _sensitvityInner(B, positions, posLocal, paths)
 end
 
 function magneticVectorPotentialSensitivity(c::AbstractCoil, pos)
+  positions, paths = getWire(c)
+  return magneticVectorPotentialSensitivity(c, positions, paths, pos)
+end
+
+function magneticVectorPotentialSensitivity(c::AbstractCoil, positions, paths, pos)
   factor = 1e-7 #*windings;
 
   valueTmp = zeros(3)
   posLocal = fromGlobalToLocal(c.c, pos)
-  positions, paths = getWire(c)
 
-  for l=1:size(positions,2)
-    posDiff =  positions[:,l] - posLocal
-    absValue = norm(posDiff)
-    if absValue > 12e-12
-      valueTmp[:] .+= paths[:,l] / absValue
-    end
-  end
+  _magneticVectorPotentialSensitivityInner(valueTmp, positions, paths, posLocal)
+
   return fromLocalToGlobalWithoutPosition(c.c, factor * valueTmp)
 end
 
-function couplingFactor(c1::AbstractCoil, c2::AbstractCoil)
-  couplingFactor = 0.0
-
-  positions, paths = getWire(c1)
-
+function _magneticVectorPotentialSensitivityInner(valueTmp, positions, paths, posLocal)
+  posDiff = zeros(Float64, 3)
   for l=1:size(positions,2)
-    pos = fromLocalToGlobal(c1.c,positions[:,l])
-    path = fromLocalToGlobalWithoutPosition(c1.c,paths[:,l])
+    for d=1:3
+      posDiff[d] = positions[d,l] - posLocal[d]
+    end
+    absValue = norm(posDiff)
+    if absValue > 12e-12
+      for d=1:3
+        valueTmp[d] += paths[d,l] / absValue
+      end
+    end
+  end
+end
 
-    vecPot = magneticVectorPotentialSensitivity(c2, pos)
+function couplingFactor(c1::AbstractCoil, c2::AbstractCoil)
+
+  positions1, paths1 = getWire(c1)
+  positions2, paths2 = getWire(c2)
+
+  couplingFactor = _couplingFactorInner(c1, c2, positions1, positions2, paths1, paths2) * 
+                  c1.windings * c2.windings
+
+  return couplingFactor
+end
+
+function _couplingFactorInner(c1, c2, positions1, positions2, paths1, paths2)
+  couplingFactor = 0.0
+  for l=1:size(positions1,2)
+    pos = fromLocalToGlobal(c1.c,positions1[:,l])
+    path = fromLocalToGlobalWithoutPosition(c1.c,paths1[:,l])
+
+    vecPot = magneticVectorPotentialSensitivity(c2, positions2, paths2, pos)
     couplingFactor += dot(vecPot, path)
   end
-
-  couplingFactor = couplingFactor * c1.windings * c2.windings
-
   return couplingFactor
 end
 
