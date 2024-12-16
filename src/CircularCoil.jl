@@ -53,7 +53,7 @@ function getWire(c::CircularCoil)
       for r=1:Nr
         angle = (r-1)/Nr*2*pi
         radius = Nt > 1 ? c.radius-(t-0.5)/Nt*c.thickness : c.radius
-        posx = Nl > 1 ? -(l-0.5)/Nl*c.length : 0.0
+        posx = Nl > 1 ? -((l-0.5)/Nl-0.5)*c.length : 0.0
         positions[1,r,t,l] = posx
         positions[2,r,t,l] = radius*cos(angle)
         positions[3,r,t,l] = radius*sin(angle)

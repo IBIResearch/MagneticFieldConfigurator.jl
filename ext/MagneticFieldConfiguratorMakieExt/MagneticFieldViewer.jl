@@ -113,16 +113,25 @@ function MagneticFieldConfigurator.viewer(system::MagneticFieldSystem)
     if btnShowSliceX.active[]
       fieldXZ = [norm(system.generators[x,gridcenter[2],z]) for z in z_, x in x_]
       maxfield = max(maximum(fieldXZ), maxfield)
+
+      inhom = (maximum(fieldXZ)-minimum(fieldXZ))/maximum(fieldXZ)
+      @info "Inhomogeneity XZ: $inhom"
     end
 
     if btnShowSliceY.active[]
       fieldYZ = [norm(system.generators[gridcenter[1],y,z]) for z in z_, y in y_]
       maxfield = max(maximum(fieldYZ), maxfield)
+
+      inhom = (maximum(fieldYZ)-minimum(fieldYZ))/maximum(fieldYZ)
+      @info "Inhomogeneity YZ: $inhom"
     end
 
     if btnShowSliceZ.active[]
       fieldXY = [norm(system.generators[x,y,gridcenter[3]]) for y in y_, x in x_]
       maxfield = max(maximum(fieldXY), maxfield)
+
+      inhom = (maximum(fieldXY)-minimum(fieldXY))/maximum(fieldXY)
+      @info "Inhomogeneity XY: $inhom"
     end
 
     if btnShowSliceX.active[]

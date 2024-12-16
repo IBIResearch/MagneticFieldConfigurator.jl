@@ -17,23 +17,23 @@ function ibicolors(i::Integer)
   return ibicolors_[mod1(i,length(ibicolors_))]
 end
 
-function Makie.plot!(ax, cc::ComposedField, shift=[0,0,0], scale=1)
+function Makie.plot!(ax, cc::ComposedField; shift=[0,0,0], scale=1)
 
   for l=1:length(cc.fields)
     if typeof(cc.fields[l]) <: AbstractCoil
-      plot!(ax, cc.fields[l], shift, scale)
+      plot!(ax, cc.fields[l]; shift, scale)
     end
   end
   return
 end
 
-function Makie.plot!(ax, coil::AbstractCoil, shift=[0,0,0], scale=1)
+function Makie.plot!(ax, coil::AbstractCoil; shift=[0,0,0], scale=1)
   pos, path = getGlobalWire(coil)
 
   x = pos[1,:].*scale .+shift[1]
   y = pos[2,:].*scale .+shift[2]
   z = pos[3,:].*scale .+shift[3]
-  lines!(ax, x, y, z, color = coil.color, linewidth = 5)
+  lines!(ax, x, y, z, color = coil.color, linewidth = 3.0)
   # linestyle = :dotted
   return
 end

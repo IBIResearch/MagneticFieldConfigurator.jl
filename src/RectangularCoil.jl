@@ -62,7 +62,7 @@ function getWire(c::RectangularCoil)
 
     for l=1:Nl
       for t=1:Nt
-        posx = Nl > 1 ? -(l-0.5)/Nl*c.length : 0.0
+        posx = Nl > 1 ? -((l-0.5)/Nl-0.5)*c.length : 0.0
         th = Nt > 1 ? (t-0.5)/Nt*c.thickness : 0.0
 
         sideA = c.sideA - 2*th
@@ -108,7 +108,7 @@ function getWire(c::RectangularCoil)
         h = c.curvature * (1- cos(ang)) 
         s_ = -c.curvature * sin(ang)
       
-        posx = (Nl > 1 ? -(l-0.5)/Nl*c.length : 0.0) 
+        posx = Nl > 1 ? -((l-0.5)/Nl-0.5)*c.length : 0.0
 
         r = 1
         for o in (1,-1)
